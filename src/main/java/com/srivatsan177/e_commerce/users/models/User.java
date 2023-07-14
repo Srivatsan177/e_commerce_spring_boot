@@ -1,17 +1,48 @@
 package com.srivatsan177.e_commerce.users.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     private String firstName;
     private String lastName;
+    private String email;
+    private String password;
+    private boolean enabled;
+    private boolean tokenExpired;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    private List<Address> addressList;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="users_role",
+            joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id") )
+    private Collection<Role> roles;
+
+    public User() {
+
+    }
+    public User(String firstName, String lastName, String email, String password, boolean enabled, boolean tokenExpired, Collection<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
+        this.tokenExpired = tokenExpired;
+        this.roles = roles;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     public long getId() {
         return id;
@@ -76,32 +107,4 @@ public class User {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
-
-    private String email;
-    private String password;
-    private boolean enabled;
-    private boolean tokenExpired;
-    public User() {
-
-    }
-    public User(String firstName, String lastName, String email, String password, boolean enabled, boolean tokenExpired, Collection<Role> roles) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
-        this.tokenExpired = tokenExpired;
-        this.roles = roles;
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="users_role",
-    joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id") )
-    private Collection<Role> roles;
 }

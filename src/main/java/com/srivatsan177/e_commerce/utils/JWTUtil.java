@@ -39,9 +39,11 @@ public class JWTUtil {
     public String getJWTToken(String username) {
         setAlgorithmIfNotExists();
         return JWT.create()
+                .withIssuer(issuer)
+                .withSubject(issuer)
                 .withClaim("username", username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 5000L))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (long) (8 * 60 * 60 * 1000)))
                 .sign(algorithm)
                 ;
     }
@@ -52,14 +54,14 @@ public class JWTUtil {
         return verifier.verify(jwt);
     }
 
-    public String getUserClaim(String jwt) throws AuthenticationException {
+    public String getUserClaim(String jwt) throws JWTVerificationException {
         setAlgorithmIfNotExists();
         setVerifierIfNotExists();
         try{
             DecodedJWT decodedJWT = verifyJWTToken(jwt);
-            return decodedJWT.getClaim("username").toString();
+            return decodedJWT.getClaim("username").asString();
         } catch (JWTVerificationException e) {
-            throw new UsernameNotFoundException("JWT Failure");
+            throw new JWTVerificationException("jwt token verification failed");
         }
     }
 }

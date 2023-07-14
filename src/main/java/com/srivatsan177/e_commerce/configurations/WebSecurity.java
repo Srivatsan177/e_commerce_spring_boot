@@ -26,6 +26,9 @@ public class WebSecurity {
             req
                     .requestMatchers(HttpMethod.GET, "/products/**").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                    .requestMatchers("/users/signin").permitAll()
+                    .requestMatchers("/users/signup").permitAll()
+                    .requestMatchers("/users/address").hasRole("USER")
                     .anyRequest().authenticated()
             ;
         }).csrf((req) -> req.disable()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).sessionManagement((sm) -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

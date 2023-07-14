@@ -1,6 +1,7 @@
 package com.srivatsan177.e_commerce.products.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.srivatsan177.e_commerce.users.models.User;
 import jakarta.persistence.*;
 
 import java.util.List;
