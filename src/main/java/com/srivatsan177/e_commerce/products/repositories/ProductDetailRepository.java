@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface ProductDetailRepository extends CrudRepository<ProductDetail, Integer> {
+public interface ProductDetailRepository extends CrudRepository<ProductDetail, String> {
 }

@@ -2,6 +2,8 @@ package com.srivatsan177.e_commerce.products.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.srivatsan177.e_commerce.orders.models.Order;
+import com.srivatsan177.e_commerce.store.models.Store;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,6 +21,12 @@ public class ProductDetail {
     @ManyToOne
     @JoinColumn(name="product_id")
     private Product product;
+
+    @OneToOne(mappedBy = "productDetail")
+    private Order order;
+
+    @ManyToOne
+    private Store store;
 
 
     public void setProduct(Product product) {

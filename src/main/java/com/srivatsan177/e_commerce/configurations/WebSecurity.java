@@ -24,11 +24,12 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((req) -> {
             req
-                    .requestMatchers(HttpMethod.GET, "/products/**").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/products/**").hasRole("SELLER")
                     .requestMatchers("/users/signin").permitAll()
                     .requestMatchers("/users/signup").permitAll()
                     .requestMatchers("/users/address").hasRole("USER")
+                    .requestMatchers("/stores/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
             ;
         }).csrf((req) -> req.disable()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).sessionManagement((sm) -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
